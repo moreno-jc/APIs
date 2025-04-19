@@ -1,0 +1,26 @@
+.nameCards {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+.shadowImg{
+    filter: drop-shadow(2px 2px 4px rgba(169, 229, 224, 0.5));
+    transition: transform 0.3s;
+}
+
+
+@media (max-width: 768px) {
+ 
+  .sizeCards {
+    width: 100%;
+    height: auto;
+    padding: auto;
+  }
+
+  .shadowImg {
+    transform: scale(1.05);
+  }
+
+  .nameCards {
+    font-size: 1rem;
+  }
+
+}
