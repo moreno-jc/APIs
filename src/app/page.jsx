@@ -1,7 +1,7 @@
 "use client";
 
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useDeferredValue } from 'react';
 import { useTransition } from 'react';
 import PokemonApi from '@/components/ApiPokemon.js';
 import RickMortyApi from '@/components/ApiRickyMorty';
@@ -20,6 +20,7 @@ function Router() {
   const [page, setPage] = useState('/');
   const [isPending, startTransition] = useTransition();
 
+
   function navigate(url) {
     startTransition(() => {
       setPage(url);
@@ -34,7 +35,7 @@ function Router() {
   } else if (page === '/peliculas') {
     content =<MoviesApi />;
   } else {
-    content = null; // home sin sección adicional
+    content  = <PokemonApi />;; // home sin sección adicional
   }
 
   return (
