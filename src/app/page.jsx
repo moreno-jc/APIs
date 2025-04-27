@@ -1,9 +1,9 @@
 "use client";
 
 
-import { Suspense, useState, useDeferredValue } from 'react';
+import { Suspense, useState } from 'react';
 import { useTransition } from 'react';
-import PokemonApi from '@/components/ApiPokemon.js';
+import PokemonApi from '@/components/pokemon/ApiPokemon';
 import RickMortyApi from '@/components/ApiRickyMorty';
 import MoviesApi from '@/components/Movies';
 import './globals.css';
