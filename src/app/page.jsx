@@ -4,7 +4,7 @@
 import { Suspense, useState } from 'react';
 import { useTransition } from 'react';
 import PokemonApi from '@/components/pokemon/ApiPokemon';
-import RickMortyApi from '@/components/ApiRickyMorty';
+import RickMortyApi from '@/components/rickMorty/ApiRickyMorty';
 import MoviesApi from '@/components/Movies';
 import './globals.css';
 

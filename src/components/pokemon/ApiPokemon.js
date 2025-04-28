@@ -1,13 +1,9 @@
 'use client';
 
-import { Suspense, useDeferredValue, useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import CardsPokemon from './CardsPokemon';
 import Image from 'next/image';
 import '../../styles/pokemon.css';
-
-function BigSpinner() {
-  return <h2 className="text-white text-xl text-center">🌀 Cargando Pokémon...</h2>;
-}
 
 export default function PokemonApi() {
   const [query, setQuery] = useState('');
@@ -41,11 +37,9 @@ export default function PokemonApi() {
         </div>
     
         <div id="pokemon" className="flex flex-col rounded-2xl text-white p-10 text-center">
-        <Suspense fallback={<BigSpinner />}>
         <div style={{ opacity: isStale ? 0.5 : 1 }}>
             <CardsPokemon query={deferredQuery} />
         </div>
-        </Suspense>        
         </div>
       </div>
     </>
