@@ -11,6 +11,16 @@
   animation: spin 1s linear infinite;
 }
 
+@keyframes portal-blink {
+  0% { opacity: 1; filter: drop-shadow(0 0 8px #39ff14); }
+  50% { opacity: 0.5; filter: drop-shadow(0 0 0px #39ff14); }
+  100% { opacity: 1; filter: drop-shadow(0 0 8px #39ff14); }
+}
+
+.portal-blink {
+  animation: portal-blink 2s infinite ease-in-out;
+}
+
 .portal-custom {
     background: #42f40c;
     border-radius: 46% 42% 44% 40%;

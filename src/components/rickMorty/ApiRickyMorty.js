@@ -30,7 +30,7 @@ export default function RickMortyApi() {
                 alt="Portal de Rick y Morty" 
                 width={70} 
                 height={150} 
-                className="inline-block spin-animation mr-6 portal-custom"
+                className="inline-block mr-2 portal-custom portal-blink"
               />
               <input 
                 className="border border-lime-500 bg-white/10 rounded-2xl p-2 w-[50%] ms-0" 
