@@ -12,7 +12,7 @@ export default function PokemonApi() {
 
     return (
       <>
-      <div className="rounded-2xl w-[80%] min-h-screen bg-[#0b2d9a61]  text-white p-10 text-center justify-center mx-auto">
+      <div className="rounded-2xl w-[80%] min-h-screen bg-[#152dff1a]  text-white p-10 text-center justify-center mx-auto">
                 <Image 
           src="/logo_pokeAPI.webp" 
           alt="Logo de PokeAPI" 
