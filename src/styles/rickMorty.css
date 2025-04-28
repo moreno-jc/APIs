@@ -1,0 +1,18 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-animation {
+  animation: spin 1s linear infinite;
+}
+
+.portal-custom {
+    background: #42f40c;
+    border-radius: 46% 42% 44% 40%;
+    box-shadow: 0 7px 11px 3px #42f40c4d, 0 7px 22px 22px #42f40c33;
+  }

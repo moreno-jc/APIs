@@ -59,25 +59,29 @@ export default function CardsRickMorty({query }) {
       
       return (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-          {paginatedData.map((personaje) => (
-            <div
-              key={personaje.name}
-              className="bg-white/10 p-4 rounded-lg hover:bg-white/20 transition text-center sizeCards"
-            >
-              <div className="flex justify-center mb-2">
-                <Image 
-                  src={personaje.image} 
-                  alt={personaje.name}
-                  width={96}
-                  height={96}
-                  className="rounded-full shadowImg"
-                />
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-2">
+            {paginatedData.map((personaje) => (
+              <div
+                key={personaje.name}
+                className="bg-white/10 p-4 rounded-lg hover:bg-white/20 transition text-center sizeCards"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-full max-w-[150px]">
+                    <Image 
+                      src={personaje.image} 
+                      alt={personaje.name}
+                      width={150}
+                      height={150}
+                      className="rounded-lg shadowImg w-full h-auto"
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <h2 className="nameCards text-white font-bold text-xl sm:text-2xl break-words">{personaje.name}</h2>
+                  </div>
+                </div>
               </div>
-              <h2 className="nameCards text-white font-bold text-2xl">{personaje.name}</h2>
-            </div>
-          ))}
-              </div>
+            ))}
+          </div>
         
         <div className="flex justify-center gap-4 mt-4">
                 <button

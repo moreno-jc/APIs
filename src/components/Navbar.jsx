@@ -5,9 +5,9 @@ export default function Navbar({ navigate, currentPage }) {
     <nav className="fixed top-4 left-4 right-4 px-6 py-3 
                     backdrop-blur-mdshadow-lg z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-white 
-                       hover:text-transparent hover:bg-clip-text
-                       hover:bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400
+        <h1 className="text-2xl font-bold hover:text-white 
+                       text-transparent bg-clip-text
+                       bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400
                        transition-all duration-500 animate-pulse">
           API Connection
         </h1>
