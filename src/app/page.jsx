@@ -1,11 +1,11 @@
 "use client";
 
-
 import { Suspense, useState } from 'react';
 import { useTransition } from 'react';
 import PokemonApi from '@/components/pokemon/ApiPokemon';
 import RickMortyApi from '@/components/rickMorty/ApiRickyMorty';
 import MoviesApi from '@/components/Movies';
+import Navbar from '@/components/Navbar';
 import './globals.css';
 
 export default function App() {
@@ -20,7 +20,6 @@ function Router() {
   const [page, setPage] = useState('/');
   const [isPending, startTransition] = useTransition();
 
-
   function navigate(url) {
     startTransition(() => {
       setPage(url);
@@ -33,39 +32,33 @@ function Router() {
   } else if (page === '/rick-and-morty') {
     content = <RickMortyApi />;
   } else if (page === '/peliculas') {
-    content =<MoviesApi />;
+    content = <MoviesApi />;
   } else {
-    content  = <PokemonApi />;; // home sin sección adicional
+    content = <PokemonApi />;
   }
 
   return (
-    <section className='min-h-screen flex flex-col items-center px-4'>
-      {/* Siempre visibles */}
-      <div className="text-center mt-8">
-        <h1 className="text-4xl font-bold text-white">API Connection</h1>
-        <p className="text-gray-400 text-lg">Selecciona una API</p>
-        <div className="flex flex-row justify-center mt-6 gap-6">
-          <button className="rounded-2xl border-white py-3 px-4 border text-white" onClick={() => navigate('/pokemon')}>
-            Pokemon 
-          </button>
-          <button className="rounded-2xl border-white py-3 px-4 border text-white" onClick={() => navigate('/rick-and-morty')}>
-            Rick & Morty 
-          </button>
-          <button className="rounded-2xl border-white py-3 px-4 border text-white" onClick={() => navigate('/peliculas')}>
-            Peliculas 
-          </button>
-        </div>
+    <section className='relative min-h-screen flex flex-col items-center px-4 overflow-hidden'>
+      <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Sección que cambia */}
-      <div className="mt-10 w-full flex justify-center">
-        {isPending && <BigSpinner />}
-        {!isPending && content}
+      <Navbar navigate={navigate} currentPage={page} />
+      
+      <div className="text-center mt-24 relative z-10">
+        <p className="text-gray-400 text-lg font-light tracking-wider">Selecciona una API</p>
+      </div>
+
+      <div className="mt-10 w-full max-w-6xl flex justify-center relative z-10">
+        <div className="w-full backdrop-blur-lg bg-black/30 rounded-3xl border border-white/10 p-8 shadow-2xl glow-effect">
+          {isPending && <BigSpinner />}
+          {!isPending && content}
+        </div>
       </div>
     </section>
   );
 }
-
 
 function BigSpinner() {
   return <h2>🌀 Loading...</h2>;
