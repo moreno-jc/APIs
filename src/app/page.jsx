@@ -47,7 +47,6 @@ function Router() {
       <Navbar navigate={navigate} currentPage={page} />
       
       <div className="text-center mt-24 relative z-10">
-        <p className="text-gray-400 text-lg font-light tracking-wider">Selecciona una API</p>
       </div>
 
       <div className="mt-10 w-full max-w-6xl flex justify-center relative z-10">

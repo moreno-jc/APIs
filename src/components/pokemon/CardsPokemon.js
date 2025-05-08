@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { useDeferredValue } from "react";
+import { useEffect, useState, useDeferredValue, startTransition} from "react";
 import Image from 'next/image';
 import '../../styles/pokemon.css';
 
 export default function CardsPokemon({ query }) {
-    const [data, setData] = useState([]);
+    const [fullData, setFullData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -13,71 +12,86 @@ export default function CardsPokemon({ query }) {
 
     const deferredQuery = useDeferredValue(query);
 
+       // Función auxiliar para transformar datos de pokémon
+       const transformPokemonData = (pokemonData) => ({
+        name: pokemonData.name,
+        image: pokemonData.sprites?.other?.home?.front_default || 
+               pokemonData.sprites?.other?.dream_world?.front_default,
+        types: pokemonData.types.map(t => t.type.name),
+        id: pokemonData.id
+      });
+
+          // Función auxiliar para fetch
+        const fetchPokemonDetails = async (url, signal) => {
+          const response = await fetch(url, { signal });
+          if (!response.ok) throw new Error(`Error fetching ${url}`);
+          return await response.json();
+        };
+
     useEffect(() => {
       const abortController = new AbortController();
-      let retryCount = 0;
-      const maxRetries = 3;
 
       async function obtenerDatos() {
         setIsLoading(true);
         setError(null);
 
-        const fetchWithRetry = async () => {
-          try {
-            const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000', {
-              signal: abortController.signal
-            });
-            
-            if (!res.ok) throw new Error('Network response was not ok');
-            const datos = await res.json();
-
-            const detallesPokemon = await Promise.all(
-              datos.results.map(async (pokemon) => {
-                const resDetalle = await fetch(pokemon.url, {
-                  signal: abortController.signal
-                });
-                if (!resDetalle.ok) throw new Error(`Error fetching ${pokemon.name}`);
-                const detalle = await resDetalle.json();
-                return {
-                  name: detalle.name,
-                  image: detalle.sprites?.other?.home?.front_default || 
-                         detalle.sprites?.other?.dream_world?.front_default,
-                  types: detalle.types.map(t => t.type.name),
-                  id: detalle.id
-                };
-              })
+        try {
+            // Fetch rápido inicial
+            const quickData = await fetchPokemonDetails(
+              'https://pokeapi.co/api/v2/pokemon?limit=20',
+              abortController.signal
             );
+          const quickDetails = await Promise.all(
+            quickData.results.map(async (pokemon) => {
+              const FirstResponse = await fetch(pokemon.url, { signal: abortController.signal});
+              const FirstDataset = await FirstResponse.json();
+              return transformPokemonData(FirstDataset);
+            })
+          );
 
-            setData(detallesPokemon);
-            setFilteredData(detallesPokemon);
-            setIsLoading(false);
+          setFilteredData(quickDetails);
+          setIsLoading(false);
 
-          } catch (error) {
+
+
+        startTransition (() => {
+            // Fetch rápido inicial
+            fetchPokemonDetails(
+              'https://pokeapi.co/api/v2/pokemon?limit=1000',
+              abortController.signal
+            )
+            .then( async (fullDataset) => {
+              const detallesPokemon = await Promise.all(
+                fullDataset.results.map(async (pokemon) => {
+                  const resDetalle = await fetch(pokemon.url, {
+                    signal: abortController.signal
+                  });
+                  if (!resDetalle.ok) throw new Error(`Error fetching ${pokemon.name}`);
+                  const fullData = await resDetalle.json();
+                  return transformPokemonData(fullData);
+                })
+              );
+              
+              setFullData(detallesPokemon);
+              setFilteredData(detallesPokemon);
+            });
+          });
+
+        } catch (error) {
             if (error.name === 'AbortError') {
               console.log('Fetch aborted');
               return;
             }
-            
-            if (retryCount < maxRetries) {
-              retryCount++;
-              console.log(`Retry attempt ${retryCount}`);
-              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-              return fetchWithRetry();
-            }
-            
             setError(error.message);
             setIsLoading(false);
+            
           }
-        };
-
-        fetchWithRetry();
-      }
-
+        }
       obtenerDatos();
 
       return () => {
         abortController.abort();
-        setData([]);
+        setFullData([]);
         setFilteredData([]);
         setCurrentPage(0);
       };
@@ -86,15 +100,15 @@ export default function CardsPokemon({ query }) {
     useEffect(() => {
       if (deferredQuery) {
         setFilteredData(
-          data.filter((pokemon) =>
+          fullData.filter((pokemon) =>
             pokemon.name.toLowerCase().includes(deferredQuery.toLowerCase())
           )
         );
         setCurrentPage(0); // Reset to the first page when filtering
       } else {
-        setFilteredData(data);
+        setFilteredData(fullData);
       }
-    }, [deferredQuery, data]);
+    }, [deferredQuery, fullData]);
 
     const paginatedData = filteredData.slice(
       currentPage * itemsPorPagina,
