@@ -36,26 +36,26 @@ export default function CardsPokemon({ query }) {
         setError(null);
 
         try {
-            // Fetch rápido inicial
+            // Primer Fetch rápido (20 pokémon)
             const quickData = await fetchPokemonDetails(
               'https://pokeapi.co/api/v2/pokemon?limit=20',
               abortController.signal
             );
-          const quickDetails = await Promise.all(
-            quickData.results.map(async (pokemon) => {
-              const FirstResponse = await fetch(pokemon.url, { signal: abortController.signal});
-              const FirstDataset = await FirstResponse.json();
-              return transformPokemonData(FirstDataset);
-            })
-          );
+            // Procesar y mostrar datos iniciales rápidamente
+            const quickDetails = await Promise.all(
+              quickData.results.map(async (pokemon) => {
+                const FirstResponse = await fetch(pokemon.url, { signal: abortController.signal});
+                const FirstDataset = await FirstResponse.json();
+                return transformPokemonData(FirstDataset);
+              })
+            );
 
           setFilteredData(quickDetails);
           setIsLoading(false);
 
 
-
+        // Segunda petición en segundo plano (dataset completo)
         startTransition (() => {
-            // Fetch rápido inicial
             fetchPokemonDetails(
               'https://pokeapi.co/api/v2/pokemon?limit=1000',
               abortController.signal
